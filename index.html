@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="sv">
+	<head>
+		<title>anba2205 - Alla kurser</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="css/style.css" type="text/css">
+		<script src="js/main.js" type="module"></script>	
+	</head>
+	
+	<body>
+		<!-- A dialog box for displaying messages to user -->
+		<dialog>
+			<p></p> <!-- The message to display to the user -->
+			<form method="dialog"> <!-- method="dialog" will close dialog on button click -->
+				<button>Ok</button>
+			</form>
+		</dialog>
+
+		<nav>
+			<ul>
+				<li>
+					<a href="index.html" class="active">Alla kurser</a>
+				</li>
+				<li>
+					<a href="register.html">Mina kurser</a>
+				</li>
+			</ul>
+		</nav>
+		<header>
+			<h1>Our Pets</h1>
+			<p>Följande kurser finns att läsa på Mittuniversitetet:</p>			
+		</header>
+
+		<main>
+			<div class="search-container">
+				<label>Search Pet: <input type="text" id="search" placeholder="Pet name or owner...">
+				</label>
+				<!-- The two spans are updated from main.js-->
+				<p>(visar <span id="pets_showing">X</span> av <span id="pets_total">Y</span> pets)</p>
+			</div>
+			
+			<table>
+				<thead>
+					<tr>
+						<th class="pet-name">Kurskod</th>
+						<th class="pet-species">Namn</th>
+						<th class="pet-breed">Ämne</th>
+						<th class="pet-birthdate">Nivå</th>
+						<th class="pet-healthstatus">hp</th>
+						<th class="owner-name">Instutition</th>
+					</tr>
+				</thead>
+				<tbody id="course_data">
+				</tbody>
+			</table>
+		</main>
+
+		<footer>
+			<p>
+				Denna sida läser data från filen
+				<a href="database.json" target="_blank">database.json</a>. <span id="course_limit"></span>
+			</p>
+		</footer>
+	</body>
+</html>
