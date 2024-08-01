@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <script src="js/main.js" type="module"></script>
+    <title>Admin Page</title>
+</head>
+<body>
+    <h1>Admin Page</h1>
+    <form id="pet-form">
+        <h2>Add/Edit Pet</h2>
+        <label for="pet-name">Name:</label>
+        <input type="text" id="pet-name" name="name" required>
+        <label for="pet-species">Species:</label>
+        <input type="text" id="pet-species" name="species" required>
+        <label for="pet-breed">Breed:</label>
+        <input type="text" id="pet-breed" name="breed" required>
+        <label for="pet-birthdate">Birthdate:</label>
+        <input type="date" id="pet-birthdate" name="birthdate" required>
+        <label for="pet-healthstatus">Health Status:</label>
+        <input type="text" id="pet-healthstatus" name="healthStatus" required>
+        <label for="pet-ownerSsn">Owner SSN:</label>
+        <input type="text" id="pet-ownerSsn" name="ownerSsn" required>
+        <button type="submit">Save Pet</button>
+    </form>
+    <button id="back-to-main">Back to Main Page</button>
+</body>
+</html>
