@@ -1,7 +1,7 @@
 import { Atlas } from './atlas.js';
 import { RESTDataSource } from './rest-data-source.js';
 
-const dataSource = new RESTDataSource('http://localhost:3000/');
+const dataSource = new RESTDataSource('http://localhost:3000');
 const atlas = new Atlas(dataSource);
 
 const registerPage = 'register.html';
@@ -92,15 +92,41 @@ function populateTable(pets, owners) {
             <td class="pet-species">${pet.species}</td>
             <td class="pet-breed">${pet.breed}</td>
             <td class="pet-birthdate">${pet.birthdate}</td>
-            <td class="pet-healthstatus">${pet.healthStatus}</td>
+            <td class="pet-healthstatus">
+                <select class="health-status-dropdown" data-name="${pet.name}">
+                    <option value="Healthy" ${pet.healthStatus === 'Healthy' ? 'selected' : ''}>Healthy</option>
+                    <option value="Sick" ${pet.healthStatus === 'Sick' ? 'selected' : ''}>Sick</option>
+                    <option value="Recovering" ${pet.healthStatus === 'Recovering' ? 'selected' : ''}>Recovering</option>
+                </select>
+            </td>
             <td class="owner-ssn">${owner ? owner.ssn : pet.ownerSsn}</td>
             <td><button class="delete-button" data-name="${pet.name}">Delete</button></td>
         `;
+        
 
         tableBody.appendChild(row);
     });
 
     petsShowing.textContent = pets.length;
+
+    // Attach event listeners to health status dropdowns
+    const healthStatusDropdowns = document.querySelectorAll('.health-status-dropdown');
+    healthStatusDropdowns.forEach(dropdown => {
+        dropdown.addEventListener('change', async function() {
+            const petName = this.getAttribute('data-name');
+            const newHealthStatus = this.value;
+            console.log(`Updating health status for pet: ${petName} to ${newHealthStatus}`);
+            const result = await atlas.updatePetHealthStatus(petName, newHealthStatus);
+            console.log(result);
+            if (result) {
+                alert('Health status updated successfully!');
+            } else {
+                alert('Failed to update health status.');
+            }
+        });
+    });
+
+
 
     // Attach event listeners to delete buttons
     const deleteButtons = document.querySelectorAll('.delete-button');
