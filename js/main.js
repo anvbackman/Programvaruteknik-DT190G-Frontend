@@ -92,7 +92,7 @@ function populateTable(pets, owners) {
             <td class="pet-breed">${pet.breed}</td>
             <td class="pet-birthdate">${pet.birthdate}</td>
             <td class="pet-healthstatus">${pet.healthStatus}</td>
-            <td class="owner-name">${owner ? owner.name : 'Unknown'}</td>
+            <td class="owner-ssn">${owner.ssn}</td>
         `;
 
         tableBody.appendChild(row);

@@ -25,6 +25,30 @@
         <input type="text" id="pet-ownerSsn" name="ownerSsn" required>
         <button type="submit">Save Pet</button>
     </form>
+
+    <main>
+        <div class="search-container">
+            <label>Search Pet: <input type="text" id="search" placeholder="Pet name or owner...">
+            </label>
+            <!-- The two spans are updated from main.js-->
+            <p>(visar <span id="pets_showing">X</span> av <span id="pets_total">Y</span> pets)</p>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th class="pet-name">Pet Name</th>
+                    <th class="pet-species">Species</th>
+                    <th class="pet-breed">Breed</th>
+                    <th class="pet-birthdate">Birthdate</th>
+                    <th class="pet-healthstatus">Health Status</th>
+                    <th class="owner-name">Owner</th>
+                </tr>
+            </thead>
+            <tbody id="course_data">
+            </tbody>
+        </table>
+    </main>
     <button id="back-to-main">Back to Main Page</button>
 </body>
 </html>
