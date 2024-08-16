@@ -1,7 +1,7 @@
 import { Atlas } from './atlas.js';
 import { RESTDataSource } from './rest-data-source.js';
 
-const dataSource = new RESTDataSource('http://localhost:3000');
+const dataSource = new RESTDataSource('http://localhost:3000/');
 const atlas = new Atlas(dataSource);
 
 const registerPage = 'register.html';
@@ -94,12 +94,33 @@ function populateTable(pets, owners) {
             <td class="pet-birthdate">${pet.birthdate}</td>
             <td class="pet-healthstatus">${pet.healthStatus}</td>
             <td class="owner-ssn">${owner ? owner.ssn : pet.ownerSsn}</td>
+            <td><button class="delete-button" data-name="${pet.name}">Delete</button></td>
         `;
 
         tableBody.appendChild(row);
     });
 
     petsShowing.textContent = pets.length;
+
+    // Attach event listeners to delete buttons
+    const deleteButtons = document.querySelectorAll('.delete-button');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', async function() {
+            const petName = this.getAttribute('data-name');
+            console.log(`Deleting pet: ${petName}`);
+            const result = await atlas.deletePet(petName);
+            console.log(result);
+            if (result) {
+                alert('Pet deleted successfully!');
+                // Refresh the table with updated data
+                const updatedPets = await atlas.getPets();
+                const updatedOwners = await atlas.getOwners();
+                populateTable(updatedPets, updatedOwners);
+            } else {
+                alert('Failed to delete pet.');
+            }
+        });
+    });
 }
 
 document.addEventListener('DOMContentLoaded', initializeApp);

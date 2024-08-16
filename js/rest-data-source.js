@@ -40,6 +40,10 @@ export class RESTDataSource extends DataSource {
 		return this.getData(`api/v1/pets/${petName}`);
 	}
 
+	async getOwners() {
+		return this.getData('api/v1/owners/');
+	}
+
 	
 	async getOwnersPets(ssn) {
 		return this.getData(`api/v1/pets/${ssn}`);
@@ -50,8 +54,8 @@ export class RESTDataSource extends DataSource {
     }
 	
     async deletePet(petName) {
-        return this.getData(`api/v1/pets/${petName}`, 'DELETE');
-    }
+		return this.getData(`api/v1/pets/${petName}`, 'DELETE');
+	}
 
     async updatePetHealthStatus(petName, healthstatus) {
         return this.getData(`api/v1/pets/${petName}`, 'PUT', {healthstatus: healthstatus});
