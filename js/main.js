@@ -53,7 +53,8 @@ async function initializeApp() {
                 petForm.reset();
                 // Refresh the table with updated data
                 const updatedPets = await atlas.getPets();
-                populateTable(updatedPets, owners);
+                const updatedOwners = await atlas.getOwners();
+                populateTable(updatedPets, updatedOwners);
             } else {
                 alert('Failed to save pet.');
             }
@@ -92,7 +93,7 @@ function populateTable(pets, owners) {
             <td class="pet-breed">${pet.breed}</td>
             <td class="pet-birthdate">${pet.birthdate}</td>
             <td class="pet-healthstatus">${pet.healthStatus}</td>
-            <td class="owner-ssn">${owner.ssn}</td>
+            <td class="owner-ssn">${owner ? owner.ssn : pet.ownerSsn}</td>
         `;
 
         tableBody.appendChild(row);
