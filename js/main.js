@@ -23,6 +23,7 @@ function showErrorMessage(message) {
     showMessage(message, 'error');
 }
 
+
 function initializeApp() {
     currentPage = window.location.pathname.split('/').find(str => str.includes('.html'));
     const petsPromise = atlas.getPets();
@@ -37,36 +38,6 @@ function initializeApp() {
             console.error(`An error occurred when getting data from Atlas: ${error.message}`);
             showErrorMessage(error.message);
         });
-
-    document.getElementById('pet-form').addEventListener('submit', async (event) => {
-        event.preventDefault();
-
-        const formData = new FormData(event.target);
-        const petData = Object.fromEntries(formData.entries());
-
-        try {
-            const response = await fetch('http://localhost:3000/api/v1/pets', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(petData)
-            });
-
-            if (response.ok) {
-                showSuccessMessage('Pet saved successfully!');
-                event.target.reset();
-                const updatedPets = await atlas.getPets();
-                const updatedOwners = await atlas.getOwners();
-                populateTable(updatedPets, updatedOwners);
-            } else {
-                showErrorMessage('Failed to save pet.');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            showErrorMessage('An error occurred while saving the pet.');
-        }
-    });
 
     document.getElementById('back-to-main').addEventListener('click', () => {
         window.location.href = mainPage;
@@ -93,63 +64,96 @@ function populateTable(pets, owners) {
         tr.appendChild(createTd(pet.species));
         tr.appendChild(createTd(pet.breed));
         tr.appendChild(createTd(pet.birthdate));
+        //tr.appendChild(createTd(pet.healthStatus));
 
-        const healthStatusTd = document.createElement('td');
-        const selectElement = document.createElement('select');
-        selectElement.classList.add('health-status-dropdown');
-        selectElement.dataset.name = pet.name;
+        if (currentPage !== mainPage) {
+            const healthStatusTd = document.createElement('td');
+            const selectElement = document.createElement('select');
+            selectElement.classList.add('health-status-dropdown');
+            selectElement.dataset.name = pet.name;
 
-        ['Healthy', 'Sick', 'Recovering'].forEach(status => {
-            const option = document.createElement('option');
-            option.value = status;
-            option.textContent = status;
-            if (status === pet.healthStatus) {
-                option.selected = true;
-            }
-            selectElement.appendChild(option);
-        });
+            ['Healthy', 'Sick', 'Recovering'].forEach(status => {
+                const option = document.createElement('option');
+                option.value = status;
+                option.textContent = status;
+                if (status === pet.healthStatus) {
+                    option.selected = true;
+                }
+                selectElement.appendChild(option);
+            });
 
-        selectElement.addEventListener('change', async function() {
-            const newHealthStatus = this.value;
-            console.log(`Updating health status for pet: ${pet.name} to ${newHealthStatus}`);
-            const result = await atlas.updatePetHealthStatus(pet.name, newHealthStatus);
+            selectElement.addEventListener('change', async function() {
+                const newHealthStatus = this.value;
+                console.log(`Updating health status for pet: ${pet.name} to ${newHealthStatus}`);
+                const result = await atlas.updatePetHealthStatus(pet.name, newHealthStatus);
 
-            if (result) {
-                showSuccessMessage('Health status updated successfully!');
-                pet.healthStatus = newHealthStatus;
-            } else {
-                showErrorMessage('Failed to update health status.');
-            }
-        });
+                if (result) {
+                    showSuccessMessage('Health status updated successfully!');
+                    pet.healthStatus = newHealthStatus;
+                } else {
+                    showErrorMessage('Failed to update health status.');
+                }
+            });
 
-        healthStatusTd.appendChild(selectElement);
-        tr.appendChild(healthStatusTd);
-        tr.appendChild(createTd(owner ? owner.ssn : pet.ownerSsn));
+            healthStatusTd.appendChild(selectElement);
+            tr.appendChild(healthStatusTd);
 
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        deleteButton.classList.add('delete-button');
-        deleteButton.dataset.name = pet.name;
+            tr.appendChild(createTd(owner ? owner.ssn : pet.ownerSsn));
+            tr.appendChild(createTd(owner ? owner.name : 'Unknown'));
 
-        deleteButton.addEventListener('click', async function() {
-            console.log(`Deleting pet: ${pet.name}`);
-            const result = await atlas.deletePet(pet.name);
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.classList.add('delete-button');
+            deleteButton.dataset.name = pet.name;
 
-            if (result) {
-                showSuccessMessage('Pet deleted successfully!');
-                const updatedPets = await atlas.getPets();
-                const updatedOwners = await atlas.getOwners();
-                populateTable(updatedPets, updatedOwners);
-            } else {
-                showErrorMessage('Failed to delete pet.');
-            }
-        });
+            deleteButton.addEventListener('click', async function() {
+                console.log(`Deleting pet: ${pet.name}`);
+                const result = await atlas.deletePet(pet.name);
 
-        tr.appendChild(deleteButton);
+                if (result) {
+                    showSuccessMessage('Pet deleted successfully!');
+                    const updatedPets = await atlas.getPets();
+                    const updatedOwners = await atlas.getOwners();
+                    populateTable(updatedPets, updatedOwners);
+                } else {
+                    showErrorMessage('Failed to delete pet.');
+                }
+            });
+
+            tr.appendChild(deleteButton);
+        }
+
         table.appendChild(tr);
     });
 
     petsShowing.innerText = pets.length;
+
+    if (currentPage !== mainPage) {
+        document.getElementById('pet-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+            const petData = Object.fromEntries(formData.entries());
+
+            try {
+                const { petName, species, breed, birthdate, healthstatus, ownerSsn } = petData;
+                const result = await atlas.addPet(petName, species, breed, birthdate, healthstatus, ownerSsn);
+
+                if (result) {
+                    showSuccessMessage('Pet saved successfully!');
+                    event.target.reset();
+                    const updatedPets = await atlas.getPets();
+                    const updatedOwners = await atlas.getOwners();
+                    populateTable(updatedPets, updatedOwners);
+                } else {
+                    showErrorMessage('Failed to save pet.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showErrorMessage('An error occurred while saving the pet.');
+            }
+        });
+    }
 }
 
 function createTd(text) {
