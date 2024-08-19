@@ -118,7 +118,12 @@ function populateTable(pets, owners) {
             console.log(`Updating health status for pet: ${petName} to ${newHealthStatus}`);
             const result = await atlas.updatePetHealthStatus(petName, newHealthStatus);
             console.log(result);
+
+            const pet = pets.find(p => p.name === petName);
+
             if (result) {
+                pet.healthStatus = newHealthStatus;
+                console.log(pet.healthStatus);
                 alert('Health status updated successfully!');
             } else {
                 alert('Failed to update health status.');
@@ -136,6 +141,7 @@ function populateTable(pets, owners) {
             console.log(`Deleting pet: ${petName}`);
             const result = await atlas.deletePet(petName);
             console.log(result);
+            
             if (result) {
                 alert('Pet deleted successfully!');
                 // Refresh the table with updated data

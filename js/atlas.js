@@ -40,7 +40,7 @@ export class Atlas {
 		return this.#dataSource.deletePet(petName);
 	}
 
-	updatePetHealthStatus(petName, healthstatus) {
-		return this.#dataSource.updateMyCourse(petName, healthstatus);
+	async updatePetHealthStatus(petName, healthstatus) {
+		return this.#dataSource.updatePetHealthStatus(petName, healthstatus);
 	}
 }

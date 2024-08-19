@@ -54,10 +54,10 @@ export class RESTDataSource extends DataSource {
     }
 	
     async deletePet(petName) {
-		return this.getData(`api/v1/pets/${petName}`, 'DELETE');
+		return this.getData(`/api/v1/pets/${petName}`, 'DELETE');
 	}
 
-    async updatePetHealthStatus(petName, healthstatus) {
-        return this.getData(`api/v1/pets/${petName}`, 'PUT', {healthstatus: healthstatus});
+    async updatePetHealthStatus(petName, healthStatus) {
+        return this.getData(`/api/v1/pets/${petName}`, 'PUT', {petName: petName, healthStatus: healthStatus});
     }
 }
