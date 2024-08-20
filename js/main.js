@@ -161,12 +161,14 @@ function populateTable(pets, owners) {
 
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Delete';
-            deleteButton.classList.add('delete-button');
             deleteButton.dataset.name = pet.petName;
+            deleteButton.dataset.ssn = pet.ownerSsn;
 
             deleteButton.addEventListener('click', async function() {
-                console.log(`Deleting pet: ${pet.petName}`);
-                const result = await atlas.deletePet(pet.petName);
+                const petName = this.dataset.name;
+                const ownerSsn = this.dataset.ssn;
+                console.log(`Deleting pet: ${petName} with owner SSN: ${ownerSsn}`);
+                const result = await atlas.deletePet(petName, ownerSsn);
 
                 if (result) {
                     showSuccessMessage('Pet deleted successfully!');

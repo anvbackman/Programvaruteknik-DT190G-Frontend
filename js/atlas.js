@@ -40,8 +40,8 @@ export class Atlas {
 		return this.#dataSource.addOwner(ownerName, address, phone, email, ownerSsn);
 	}
 
-	async deletePet(petName) {
-		return this.#dataSource.deletePet(petName);
+	async deletePet(petName, ownerSsn) {
+		return this.#dataSource.deletePet(petName, ownerSsn);
 	}
 
 	async updatePetHealthStatus(petName, healthstatus) {
