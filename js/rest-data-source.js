@@ -45,13 +45,17 @@ export class RESTDataSource extends DataSource {
 	}
 
 	
-	async getOwnersPets(ssn) {
-		return this.getData(`/api/v1/pets/${ssn}`);
+	async getOwnersPets(ownerSsn) {
+		return this.getData(`/api/v1/pets/${ownerSsn}`);
 	}
 
     async addPet(petName, species, breed, birthdate, healthStatus, ownerSsn) {
         return this.getData(`/api/v1/pets/`, 'POST', {petName: petName, species: species, breed: breed, birthdate: birthdate, healthStatus: healthStatus, ownerSsn: ownerSsn})
     }
+
+	async addOwner(ownerName, address, phone, email, ownerSsn) {
+		return this.getData(`/api/v1/owners/`, 'POST', {ownerName: ownerName, address: address, phone: phone, email: email, ownerSsn: ownerSsn});
+	}
 	
     async deletePet(petName) {
 		return this.getData(`/api/v1/pets/${petName}`, 'DELETE');

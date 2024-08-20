@@ -42,7 +42,63 @@ function initializeApp() {
     document.getElementById('back-to-main').addEventListener('click', () => {
         window.location.href = mainPage;
     });
+
+    if (currentPage !== mainPage) {
+        document.getElementById('pet-form').addEventListener('submit', formSubmition);
+    }
 }
+
+async function formSubmition(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const petData = Object.fromEntries(formData.entries());
+
+    // Log FormData entries for debugging
+    for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+    }
+
+    try {
+        const { petName, species, breed, birthdate, healthStatus, ownerSsn, ownerName, address, phone, email } = petData;
+
+        // Validate required fields
+        //if (!petName || !species || !breed || !birthdate || !healthStatus || !ownerSsn || !ownerName || !address || !phone || !email) {
+        //    showErrorMessage('All fields are required.');
+        //    return;
+        //}
+
+        const owners = await atlas.getOwners();
+        const existingOwner = owners.find(owner => owner.ownerSsn === ownerSsn);
+
+        if (!existingOwner) {
+            console.log(`Owner with SSN ${ownerSsn} does not exist. Adding new owner...`);
+            // Add the new owner if they do not already exist
+            const ownerData = { ownerName, address, phone, email, ownerSsn };
+            console.log('Owner Data:', ownerData);
+            await atlas.addOwner(ownerData);
+        }
+        console.log("owner exists");
+
+        const petDataToSend = { petName, species, breed, birthdate, healthStatus, ownerSsn };
+        console.log('Pet Data:', petDataToSend);
+        const result = await atlas.addPet(petDataToSend);
+
+        if (result) {
+            showSuccessMessage('Pet saved successfully!');
+            event.target.reset();
+            const updatedPets = await atlas.getPets();
+            const updatedOwners = await atlas.getOwners();
+            populateTable(updatedPets, updatedOwners);
+        } else {
+            showErrorMessage('Failed to save pet.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showErrorMessage('An error occurred while saving the pet.');
+    }
+}
+
 
 function populateTable(pets, owners) {
     const table = document.getElementById('course_data');
@@ -58,9 +114,9 @@ function populateTable(pets, owners) {
     petsTotal.innerText = pets.length;
 
     pets.forEach(pet => {
-        const owner = owners.find(owner => owner.ssn === pet.ownerSsn);
+        const owner = owners.find(owner => owner.ownerSsn === pet.ownerSsn);
         const tr = document.createElement('tr');
-        tr.appendChild(createTd(pet.name));
+        tr.appendChild(createTd(pet.petName));
         tr.appendChild(createTd(pet.species));
         tr.appendChild(createTd(pet.breed));
         tr.appendChild(createTd(pet.birthdate));
@@ -70,7 +126,7 @@ function populateTable(pets, owners) {
             const healthStatusTd = document.createElement('td');
             const selectElement = document.createElement('select');
             selectElement.classList.add('health-status-dropdown');
-            selectElement.dataset.name = pet.name;
+            selectElement.dataset.name = pet.petName;
 
             ['Healthy', 'Sick', 'Recovering'].forEach(status => {
                 const option = document.createElement('option');
@@ -84,8 +140,8 @@ function populateTable(pets, owners) {
 
             selectElement.addEventListener('change', async function() {
                 const newHealthStatus = this.value;
-                console.log(`Updating health status for pet: ${pet.name} to ${newHealthStatus}`);
-                const result = await atlas.updatePetHealthStatus(pet.name, newHealthStatus);
+                console.log(`Updating health status for pet: ${pet.petName} to ${newHealthStatus}`);
+                const result = await atlas.updatePetHealthStatus(pet.petName, newHealthStatus);
 
                 if (result) {
                     showSuccessMessage('Health status updated successfully!');
@@ -98,17 +154,19 @@ function populateTable(pets, owners) {
             healthStatusTd.appendChild(selectElement);
             tr.appendChild(healthStatusTd);
 
-            tr.appendChild(createTd(owner ? owner.ssn : pet.ownerSsn));
-            tr.appendChild(createTd(owner ? owner.name : 'Unknown'));
+            tr.appendChild(createTd(owner ? owner.ownerSsn : pet.ownerSsn));
+
+
+            tr.appendChild(createTd(owner ? owner.ownerName : 'Unknown'));
 
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Delete';
             deleteButton.classList.add('delete-button');
-            deleteButton.dataset.name = pet.name;
+            deleteButton.dataset.name = pet.petName;
 
             deleteButton.addEventListener('click', async function() {
-                console.log(`Deleting pet: ${pet.name}`);
-                const result = await atlas.deletePet(pet.name);
+                console.log(`Deleting pet: ${pet.petName}`);
+                const result = await atlas.deletePet(pet.petName);
 
                 if (result) {
                     showSuccessMessage('Pet deleted successfully!');
@@ -127,33 +185,6 @@ function populateTable(pets, owners) {
     });
 
     petsShowing.innerText = pets.length;
-
-    if (currentPage !== mainPage) {
-        document.getElementById('pet-form').addEventListener('submit', async (event) => {
-            event.preventDefault();
-
-            const formData = new FormData(event.target);
-            const petData = Object.fromEntries(formData.entries());
-
-            try {
-                const { petName, species, breed, birthdate, healthstatus, ownerSsn } = petData;
-                const result = await atlas.addPet(petName, species, breed, birthdate, healthstatus, ownerSsn);
-
-                if (result) {
-                    showSuccessMessage('Pet saved successfully!');
-                    event.target.reset();
-                    const updatedPets = await atlas.getPets();
-                    const updatedOwners = await atlas.getOwners();
-                    populateTable(updatedPets, updatedOwners);
-                } else {
-                    showErrorMessage('Failed to save pet.');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showErrorMessage('An error occurred while saving the pet.');
-            }
-        });
-    }
 }
 
 function createTd(text) {
