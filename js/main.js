@@ -39,14 +39,31 @@ function initializeApp() {
             showErrorMessage(error.message);
         });
 
-    document.getElementById('back-to-main').addEventListener('click', () => {
-        window.location.href = mainPage;
-    });
-
     if (currentPage !== mainPage) {
         document.getElementById('pet-form').addEventListener('submit', formSubmition);
     }
+
+    document.getElementById('search').addEventListener('input', handleSearch);
 }
+
+async function handleSearch(event) {
+    console.log("Searching event called")
+    const query = event.target.value.toLowerCase();
+    const filteredPets = allPets.filter(pet => 
+        pet.petName.toLowerCase().includes(query) ||
+        pet.ownerSsn.toLowerCase().includes(query)
+    );
+
+    atlas.getOwners().then(owners => {
+        populateTable(filteredPets, owners);
+    }
+    ).catch(error => {
+        console.error('Error fetching owners:', error);
+        showErrorMessage('An error occurred while fetching owners.');
+    });
+
+}
+
 
 async function formSubmition(event) {
     event.preventDefault();
@@ -101,9 +118,11 @@ async function formSubmition(event) {
 
 
 function populateTable(pets, owners) {
-    const table = document.getElementById('course_data');
+    const table = document.getElementById('pet_data');
     const petsShowing = document.getElementById('pets_showing');
     const petsTotal = document.getElementById('pets_total');
+
+    
 
     if (!table || !petsShowing || !petsTotal) {
         console.error('Required HTML elements are missing.');
@@ -120,7 +139,21 @@ function populateTable(pets, owners) {
         tr.appendChild(createTd(pet.species));
         tr.appendChild(createTd(pet.breed));
         tr.appendChild(createTd(pet.birthdate));
-        //tr.appendChild(createTd(pet.healthStatus));
+        
+        tr.appendChild(createTd(owner ? owner.ownerName : 'Unknown'));
+        tr.appendChild(createTd(owner ? owner.ownerSsn : pet.ownerSsn));
+
+
+        
+
+        tr.appendChild(createTd(owner ? owner.address : 'Unknown'));
+        tr.appendChild(createTd(owner ? owner.phone : 'Unknown'));
+        tr.appendChild(createTd(owner ? owner.email : 'Unknown'));
+        
+        
+        
+
+        
 
         if (currentPage !== mainPage) {
             const healthStatusTd = document.createElement('td');
@@ -154,10 +187,8 @@ function populateTable(pets, owners) {
             healthStatusTd.appendChild(selectElement);
             tr.appendChild(healthStatusTd);
 
-            tr.appendChild(createTd(owner ? owner.ownerSsn : pet.ownerSsn));
-
-
-            tr.appendChild(createTd(owner ? owner.ownerName : 'Unknown'));
+           
+            
 
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Delete';
@@ -181,6 +212,9 @@ function populateTable(pets, owners) {
             });
 
             tr.appendChild(deleteButton);
+        }
+        else {
+            tr.appendChild(createTd(pet.healthStatus));
         }
 
         table.appendChild(tr);

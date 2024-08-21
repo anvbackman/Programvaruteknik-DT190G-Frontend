@@ -39,6 +39,9 @@
 				<!-- The two spans are updated from main.js-->
 				<p>(visar <span id="pets_showing">X</span> av <span id="pets_total">Y</span> pets)</p>
 			</div>
+			<div id="pets_container">
+				<ul id="pets-list"></ul>
+			</div>
 			
 			<table>
 				<thead>
@@ -47,20 +50,21 @@
 						<th class="pet-species">Species</th>
 						<th class="pet-breed">Breed</th>
 						<th class="pet-birthdate">Birthdate</th>
-						<th class="pet-healthstatus">Health Status</th>
 						<th class="owner-name">Owner</th>
+						<th class="owner-ssn">Owner SSN</th>
+						<th class="owner-address">Address</th>
+						<th class="owner-phone">Phone</th>
+						<th class="owner-email">Email</th>
+						<th class="pet-healthstatus">Health Status</th>
 					</tr>
 				</thead>
-				<tbody id="course_data">
+				<tbody id="pet_data">
 				</tbody>
 			</table>
 		</main>
 
 		<footer>
-			<p>
-				Denna sida läser data från filen
-				<a href="database.json" target="_blank">database.json</a>. <span id="course_limit"></span>
-			</p>
+			
 		</footer>
 	</body>
 </html>
