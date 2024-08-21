@@ -77,13 +77,13 @@ async function formSubmition(event) {
     }
 
     try {
-        const { petName, species, breed, birthdate, healthStatus, ownerSsn, ownerName, address, phone, email } = petData;
+        const { petName, species, breed, color, birthdate, healthStatus, ownerSsn, ownerName, address, phone, email } = petData;
 
         // Validate required fields
-        //if (!petName || !species || !breed || !birthdate || !healthStatus || !ownerSsn || !ownerName || !address || !phone || !email) {
-        //    showErrorMessage('All fields are required.');
-        //    return;
-        //}
+        if (!petName || !species || !breed || !birthdate || !healthStatus || !ownerSsn || !ownerName || !address || !phone || !email) {
+            showErrorMessage('All fields are required.');
+            return;
+        }
 
         const owners = await atlas.getOwners();
         const existingOwner = owners.find(owner => owner.ownerSsn === ownerSsn);
@@ -91,25 +91,19 @@ async function formSubmition(event) {
         if (!existingOwner) {
             console.log(`Owner with SSN ${ownerSsn} does not exist. Adding new owner...`);
             // Add the new owner if they do not already exist
-            const ownerData = { ownerName, address, phone, email, ownerSsn };
-            console.log('Owner Data:', ownerData);
-            await atlas.addOwner(ownerData);
+            await atlas.addOwner(ownerName, address, phone, email, ownerSsn);
         }
-        console.log("owner exists");
+        console.log("Owner exists");
 
-        const petDataToSend = { petName, species, breed, birthdate, healthStatus, ownerSsn };
-        console.log('Pet Data:', petDataToSend);
-        const result = await atlas.addPet(petDataToSend);
+        // Add the new pet
+        await atlas.addPet(petName, species, breed, color, birthdate, healthStatus, ownerSsn);
 
-        if (result) {
-            showSuccessMessage('Pet saved successfully!');
-            event.target.reset();
-            const updatedPets = await atlas.getPets();
-            const updatedOwners = await atlas.getOwners();
-            populateTable(updatedPets, updatedOwners);
-        } else {
-            showErrorMessage('Failed to save pet.');
-        }
+        showSuccessMessage('Pet saved successfully!');
+        event.target.reset();
+        const updatedPets = await atlas.getPets();
+        const updatedOwners = await atlas.getOwners();
+        populateTable(updatedPets, updatedOwners);
+
     } catch (error) {
         console.error('Error:', error);
         showErrorMessage('An error occurred while saving the pet.');
@@ -138,6 +132,7 @@ function populateTable(pets, owners) {
         tr.appendChild(createTd(pet.petName));
         tr.appendChild(createTd(pet.species));
         tr.appendChild(createTd(pet.breed));
+        tr.appendChild(createTd(pet.color));
         tr.appendChild(createTd(pet.birthdate));
         
         tr.appendChild(createTd(owner ? owner.ownerName : 'Unknown'));

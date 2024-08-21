@@ -32,8 +32,8 @@ export class Atlas {
 		return this.#dataSource.getPets(ssn);
 	}
 
-	async addPet(petName, species, breed, birthdate, healthStatus, ownerSsn) {
-		return this.#dataSource.addPet(petName, species, breed, birthdate, healthStatus, ownerSsn);
+	async addPet(petName, species, breed, color, birthdate, healthStatus, ownerSsn) {
+		return this.#dataSource.addPet(petName, species, breed, color, birthdate, healthStatus, ownerSsn);
 	}
 
 	async addOwner(ownerName, address, phone, email, ownerSsn) {
