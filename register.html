@@ -50,8 +50,7 @@
         <div class="search-container">
             <label>Search Pet: <input type="text" id="search" placeholder="Pet name or owner...">
             </label>
-            <!-- The two spans are updated from main.js-->
-            <p>(visar <span id="pets_showing">X</span> av <span id="pets_total">Y</span> pets)</p>
+            <p>(Showing <span id="pets_showing">X</span> of <span id="pets_total">Y</span> pets)</p>
         </div>
         
         <table>
@@ -69,10 +68,12 @@
                     <th class="pet-healthstatus">Health Status</th>
                 </tr>
             </thead>
-            <tbody id="course_data">
+            <tbody id="pet_data">
             </tbody>
         </table>
     </main>
-    <button id="back-to-main">Back to Main Page</button>
+    <a href="index.html">
+        <button id="back-to-main">Back to Main Page</button>
+    </a>
 </body>
 </html>

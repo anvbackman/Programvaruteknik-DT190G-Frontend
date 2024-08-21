@@ -9,35 +9,15 @@
 	</head>
 	
 	<body>
-		<!-- A dialog box for displaying messages to user -->
-		<dialog>
-			<p></p> <!-- The message to display to the user -->
-			<form method="dialog"> <!-- method="dialog" will close dialog on button click -->
-				<button>Ok</button>
-			</form>
-		</dialog>
-
-		<nav>
-			<ul>
-				<li>
-					<a href="index.html" class="active">Alla kurser</a>
-				</li>
-				<li>
-					<a href="register.html">Mina kurser</a>
-				</li>
-			</ul>
-		</nav>
 		<header>
-			<h1>Our Pets</h1>
-			<p>Följande kurser finns att läsa på Mittuniversitetet:</p>			
+			<h1>Our Pets</h1>	
 		</header>
 
 		<main>
 			<div class="search-container">
 				<label>Search Pet: <input type="text" id="search" placeholder="Pet name or owner...">
 				</label>
-				<!-- The two spans are updated from main.js-->
-				<p>(visar <span id="pets_showing">X</span> av <span id="pets_total">Y</span> pets)</p>
+				<p>(Showing <span id="pets_showing">X</span> of <span id="pets_total">Y</span> pets)</p>
 			</div>
 			<div id="pets_container">
 				<ul id="pets-list"></ul>
@@ -62,7 +42,9 @@
 				</tbody>
 			</table>
 		</main>
-
+		<a href="register.html">
+			<button id="back-to-main">Admin Page</button>
+		</a>
 		<footer>
 			
 		</footer>
