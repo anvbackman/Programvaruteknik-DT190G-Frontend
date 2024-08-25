@@ -11,25 +11,42 @@ let currentPage = mainPage;
 let allPets = [];
 const maxPetsToShow = 100;
 
-function showMessage(message, style) {
+/**
+ * Shows a message to the user.
+ * 
+ * @param {*} message the message to show
+ */
+function showMessage(message) {
     alert(message);
 }
 
+/**
+ * Shows a success message to the user.
+ * 
+ * @param {*} message the success message to show
+ */
 function showSuccessMessage(message) {
-    showMessage(message, 'success');
+    showMessage(message);
 }
 
+/**
+ * Shows an error message to the user.
+ * 
+ * @param {*} message the error message to show
+ */
 function showErrorMessage(message) {
-    showMessage(message, 'error');
+    showMessage(message);
 }
 
-
+/**
+ * Initializes the application.
+ */
 function initializeApp() {
-    currentPage = window.location.pathname.split('/').find(str => str.includes('.html'));
-    const petsPromise = atlas.getPets();
-    const ownersPromise = atlas.getOwners();
-
-    Promise.all([petsPromise, ownersPromise])
+    currentPage = window.location.pathname.split('/').find(str => str.includes('.html')); // Get the current page
+    const petsPromise = atlas.getPets(); // Get all pets
+    const ownersPromise = atlas.getOwners(); // Get all owners
+ 
+    Promise.all([petsPromise, ownersPromise]) // Wait for both promises to resolve
         .then(([pets, owners]) => {
             allPets = pets;
             populateTable(pets, owners);
@@ -39,7 +56,7 @@ function initializeApp() {
             showErrorMessage(error.message);
         });
 
-    if (currentPage !== mainPage) {
+    if (currentPage === registerPage) { 
         document.getElementById('pet-form').addEventListener('submit', formSubmition);
     }
 
