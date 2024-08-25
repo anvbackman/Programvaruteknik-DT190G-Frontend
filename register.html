@@ -9,8 +9,10 @@
 </head>
 <body>
     <h1>Admin Page</h1>
+    <!-- Form for adding pets-->
     <form id="pet-form">
         <h2>Add/Edit Pet</h2>
+        <!-- Input fields when adding pet/owner -->
         <label for="pet-petName">Name:</label>
         <input type="text" id="pet-name" name="petName" required>
 
@@ -43,12 +45,11 @@
         
         <label for="pet-ownerEmail">Owner Email:</label>
         <input type="text" id="pet-ownerEmail" name="email" required>
-        
-        
 
         <button id="submit-button" type="submit">Save Pet</button>
     </form>
 
+    <!-- Search bar and table for displaying pets -->
     <main>
         <div class="search-container">
             <label>Search Pet: <input type="text" id="search" placeholder="Pet name or owner...">
@@ -59,6 +60,7 @@
         <table>
             <thead>
                 <tr>
+                    <th class="pet-image">Image</th>
                     <th class="pet-petName">Pet Name</th>
                     <th class="pet-species">Species</th>
                     <th class="pet-breed">Breed</th>
@@ -76,6 +78,7 @@
             </tbody>
         </table>
     </main>
+    <!-- Button to go back to main page -->
     <a href="index.html">
         <button id="back-to-main">Back to Main Page</button>
     </a>

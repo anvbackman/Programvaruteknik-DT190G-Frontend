@@ -12,7 +12,7 @@
 		<header>
 			<h1>Our Pets</h1>	
 		</header>
-
+		<!-- Form for searching for pets / owners -->
 		<main>
 			<div class="search-container">
 				<label>Search Pet: <input type="text" id="search" placeholder="Pet name or owner...">
@@ -23,12 +23,15 @@
 				<ul id="pets-list"></ul>
 			</div>
 			
+			<!-- Table for displaying pets -->
 			<table>
 				<thead>
 					<tr>
+						<th class="pet-image">Image</th>
 						<th class="pet-petName">Pet Name</th>
 						<th class="pet-species">Species</th>
 						<th class="pet-breed">Breed</th>
+						<th class="pet-color">Color</th>
 						<th class="pet-birthdate">Birthdate</th>
 						<th class="owner-name">Owner</th>
 						<th class="owner-ssn">Owner SSN</th>
@@ -42,6 +45,7 @@
 				</tbody>
 			</table>
 		</main>
+		<!-- Button to go back to main page -->
 		<a href="register.html">
 			<button id="back-to-main">Admin Page</button>
 		</a>
