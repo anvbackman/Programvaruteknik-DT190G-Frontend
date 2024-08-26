@@ -40,20 +40,22 @@ function showErrorMessage(message) {
 /**
  * Initializes the application.
  */
-function initializeApp() {
-    currentPage = window.location.pathname.split('/').find(str => str.includes('.html')); // Get the current page
-    const petsPromise = atlas.getPets(); // Get all pets
-    const ownersPromise = atlas.getOwners(); // Get all owners
- 
-    Promise.all([petsPromise, ownersPromise]) // Wait for both promises to resolve
-        .then(([pets, owners]) => {
-            allPets = pets;
-            populateTable(pets, owners);
-        })
-        .catch(error => {
-            console.error(`An error occurred when getting data from Atlas: ${error.message}`);
-            showErrorMessage(error.message);
-        });
+async function initializeApp() {
+    try {
+        currentPage = window.location.pathname.split('/').find(str => str.includes('.html')); // Get the current page
+
+        // Await both promises to resolve
+        const pets = await atlas.getPets(); 
+        const owners = await atlas.getOwners();
+
+        // Once both are resolved, proceed with processing the data
+        allPets = pets;
+        populateTable(pets, owners);
+
+    } catch (error) {
+        console.error(`An error occurred when getting data from Atlas: ${error.message}`);
+        showErrorMessage(error.message);
+    }
 
     if (currentPage === registerPage) {  // If the current page is the register page
         document.getElementById('pet-form').addEventListener('submit', formSubmition);
