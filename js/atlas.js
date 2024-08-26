@@ -1,11 +1,10 @@
 export class Atlas {
-	/**
-	 * The data source used for this Atlas instance.
-	 */
+	// The data source used by the Atlas instance
 	#dataSource;
 
 	/**
-	 * Create a new Atlas instance with the specified data source for its data.
+	 * Constructor to create a new Atlas instance with the specified data source for its data.
+	 * 
 	 * @param dataSource the data source to be used
 	 */
 	constructor(dataSource) {

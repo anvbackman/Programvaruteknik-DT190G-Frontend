@@ -7,6 +7,7 @@ import { DataSource } from './data-source.js';
 export class RESTDataSource extends DataSource {
 	/**
 	 * Create a new data source with the specified URL as its source of data.
+	 * 
 	 * @param url the base URL to the REST API to be used as source of data
 	 */
 	constructor(url) {

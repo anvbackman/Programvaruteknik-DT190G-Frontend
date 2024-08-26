@@ -1,16 +1,13 @@
-/**
- * This is a base class for data sources to be used in an Atlas instance.
- */
 export class DataSource {
-    /** The URL to the data source (eg. a local/remote JSON file or a REST API). */
+    // The URL used as source of data
     #url;
 
-    /** The CSRF token to be used in the data source. */
+    // The CSRF token to be used in the data source
     #csrfToken;
 
     /**
-     * Create a new data source with the specified URL as its source.
-     * @param url an url to be used as source of data
+     * Create a new data source with the URL
+     * @param url an url to be used
      */
     constructor(url) {
         this.#url = url;
@@ -49,18 +46,18 @@ export class DataSource {
                     '_csrf': this.#csrfToken
                 }
             } else {
-                requestBody['_csrf'] = this.#csrfToken; // add CSRF token to the body
+                requestBody['_csrf'] = this.#csrfToken; 
             }
-            requestInfo['body'] = JSON.stringify(requestBody); // data needs to be parsed into JSON
-            requestInfo['headers']['Content-Type'] = 'application/json'; // we are sending json
+            requestInfo['body'] = JSON.stringify(requestBody); 
+            requestInfo['headers']['Content-Type'] = 'application/json'; 
         }
 
         return fetch(this.#url + endpoint, requestInfo);
     }
 
     /**
-     * Get the URL this data source uses.
-     * @return the URL to the data source used
+     * Get the URL 
+     * @return the URL 
      */
     getURL() {
         return this.#url;
