@@ -1,7 +1,7 @@
 import { Atlas } from './atlas.js';
 import { RESTDataSource } from './rest-data-source.js';
 
-const dataSource = new RESTDataSource('http://localhost:3000');
+const dataSource = new RESTDataSource('https://anba2205-project-backend-dt190g.azurewebsites.net');
 const atlas = new Atlas(dataSource);
 
 const registerPage = 'register.html';
