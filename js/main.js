@@ -16,11 +16,7 @@ let allPets = [];
  * @param {*} message the message to show
  */
 function showMessage(message) {
-    const dialog = document.querySelector('dialog');
-    const text = dialog.querySelector('p');
-    text.innerText = message;
-    dialog.className = style;
-    dialog.show()
+    alert(message);
 }
 
 /**
@@ -29,7 +25,7 @@ function showMessage(message) {
  * @param {*} message the success message to show
  */
 function showSuccessMessage(message) {
-    showMessage(message, 'success');
+    showMessage(message);
 }
 
 /**
@@ -38,7 +34,7 @@ function showSuccessMessage(message) {
  * @param {*} message the error message to show
  */
 function showErrorMessage(message) {
-    showMessage(message, 'error');
+    showMessage(message);
 }
 
 /**
@@ -199,6 +195,7 @@ function populateTable(pets, owners) {
  
                 if (result) { // Check if the health status was updated successfully
                     showSuccessMessage('Health status updated successfully!');
+                    console.log('Health status updated successfully!');
                     pet.healthStatus = newHealthStatus;
                 } else {
                     showErrorMessage('Failed to update health status.');
