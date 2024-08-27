@@ -185,8 +185,8 @@ function populateTable(pets, owners) {
 
             ['Healthy', 'Sick', 'Recovering'].forEach(status => { // Add the health status options
                 const option = document.createElement('option');
-                option.value = status;
-                option.textContent = status;
+                option.value = status; 
+                option.textContent = status; 
                 if (status === pet.healthStatus) { // Set the selected option
                     option.selected = true;
                 }
