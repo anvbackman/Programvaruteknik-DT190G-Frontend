@@ -16,7 +16,11 @@ let allPets = [];
  * @param {*} message the message to show
  */
 function showMessage(message) {
-    alert(message);
+    const dialog = document.querySelector('dialog');
+    const text = dialog.querySelector('p');
+    text.innerText = message;
+    dialog.className = style;
+    dialog.show()
 }
 
 /**
@@ -25,7 +29,7 @@ function showMessage(message) {
  * @param {*} message the success message to show
  */
 function showSuccessMessage(message) {
-    showMessage(message);
+    showMessage(message, 'success');
 }
 
 /**
@@ -34,7 +38,7 @@ function showSuccessMessage(message) {
  * @param {*} message the error message to show
  */
 function showErrorMessage(message) {
-    showMessage(message);
+    showMessage(message, 'error');
 }
 
 /**
@@ -101,7 +105,7 @@ async function formSubmition(event) {
         const { petName, species, breed, color, birthdate, healthStatus, ownerSsn, ownerName, address, phone, email } = petData; 
 
         // Validate required fields
-        if (!petName || !species || !breed || !birthdate || !healthStatus || !ownerSsn || !ownerName || !address || !phone || !email) {
+        if (!petName || !species || !breed || !color || !birthdate || !healthStatus || !ownerSsn || !ownerName || !address || !phone || !email) {
             showErrorMessage('All fields are required.');
             return;
         }
